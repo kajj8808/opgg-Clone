@@ -3,5 +3,6 @@
 - [x] getMatchs
 - [x] getMatch
 - [ ] MatchSearch
-- [ ] MatchDetail
+- [ ] ShowMatchs
+- [ ] MatchDetail (total , build)
 

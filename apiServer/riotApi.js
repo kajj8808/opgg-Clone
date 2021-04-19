@@ -30,7 +30,7 @@ const sendMatchsData = async (name, res) => {
   const {
     data: { puuid },
   } = await getSummoner(name);
-  const { data: matchData } = await getMatchs(puuid , count);
+  const { data: matchData } = await getMatchs(puuid, count);
   await matchData.map(async (match, index) => {
     await setTimeout(async () => {
       const {

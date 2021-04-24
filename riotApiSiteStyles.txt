@@ -1,0 +1,30 @@
+MatchContainer
+
+GameStates
+
+GameSet
+	ChampionIcon
+	Spells
+		SpellIcon
+	Styles
+		StyleIcon
+	ChampionName
+
+KDA
+
+Stats
+
+Items
+	Item
+
+Players
+	BlueTeam		
+		Player
+			ChampionIconMin
+			PlayerName
+	RedTeam
+		Player
+			ChampionIconMin
+			PlayerName
+
+ShowDetailBtn

@@ -13,16 +13,15 @@ export const useSummoner = (name) => {
         let { data: matchs } = result;
         const data = matchs.map((users) => {
           const searchUser = users.participants.filter(
-            (userData) => userData.summonerName === "name"
+            (userData) => userData.summonerName === name
           );
-          const { gameDuration, gameMode } = users;
+          const { gameDuration, gameMode, summonerLevel, profileIconId, leagues } = users;
           const {
             win,
             championName,
             spell1Id,
             spell2Id,
-            summoner1Casts,
-            summoner2Casts,
+            perks: { styles },
             kills,
             deaths,
             assists,
@@ -37,13 +36,20 @@ export const useSummoner = (name) => {
             item5,
             item6,
           } = searchUser[0];
+          const mainStyle = styles[0].selections[0].perk;
+          const subStyle = styles[1].selections[0].perk;
           return {
+            summonerLevel,
+            profileIconId,
+            leagues,
             gameDuration,
             gameMode,
             win,
             championName,
             spell1Id,
             spell2Id,
+            mainStyle,
+            subStyle,
             kills,
             deaths,
             assists,

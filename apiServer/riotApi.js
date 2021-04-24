@@ -24,33 +24,44 @@ const getMatchs = (puuid, count) =>
 
 const getMatch = (matchId) => apiv5.get(`match/v5/matches/${matchId}`);
 
+const getLeague = (id) => apiv4.get(`league/v4/entries/by-summoner/${id}`);
+
 const sendMatchsData = async (name, res) => {
   let result = [];
   const count = api_config.count;
-  const {
-    data: { puuid },
-  } = await getSummoner(name);
-  const { data: matchData } = await getMatchs(puuid, count);
-  await matchData.map(async (match, index) => {
-    await setTimeout(async () => {
-      const {
-        data: {
-          info: { gameDuration, gameMode, participants }, //https://asia.api.riotgames.com/lol/match/v5/matches/KR_5133085931?api_key=RGAPI-a7409599-c3c4-497a-a37a-fb40fd57f991
-        },
-      } = await getMatch(match);
-      result.push({
-        gameDuration,
-        gameMode,
-        participants,
-      });
-      if (index === count - 1) {
-        res.header("Access-Control-Allow-Origin", "*");
-        return res.json(result);
-      } else {
-        console.log(index);
-      }
-    }, index * 300);
-  });
+  try {
+    const {
+      data: { puuid, id, summonerLevel, profileIconId },
+    } = await getSummoner(name);
+    let { data: leagues } = await getLeague(id);
+    leagues = await leagues.filter((league) => league.queueType === "RANKED_SOLO_5x5");
+    const { data: matchData } = await getMatchs(puuid, count);
+    await matchData.map(async (match, index) => {
+      await setTimeout(async () => {
+        const {
+          data: {
+            info: { gameDuration, gameMode, participants },
+          },
+        } = await getMatch(match);
+        result.push({
+          leagues,
+          summonerLevel,
+          profileIconId,
+          gameDuration,
+          gameMode,
+          participants,
+        });
+        if (index === count - 1) {
+          res.header("Access-Control-Allow-Origin", "*");
+          return res.json(result);
+        } else {
+          console.log(index);
+        }
+      }, index * 100);
+    });
+  } catch (error) {
+    return res.send(eror);
+  }
 };
 
 module.exports = { sendMatchsData };
